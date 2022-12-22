@@ -1,6 +1,10 @@
 import pytest
 
-from bumpversion.version_part import ConfiguredVersionPartConfiguration, NumericVersionPartConfiguration, VersionPart
+from bumpversion.version_part import (
+    ConfiguredVersionPartConfiguration,
+    NumericVersionPartConfiguration,
+    VersionPart,
+)
 
 
 @pytest.fixture(params=[None, (("0", "1", "2"),), (("0", "3"),)])

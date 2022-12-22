@@ -3,7 +3,11 @@ import re
 import sre_constants
 import string
 
-from bumpversion.exceptions import IncompleteVersionRepresentationException, InvalidVersionPartException, MissingValueForSerializationException
+from bumpversion.exceptions import (
+    IncompleteVersionRepresentationException,
+    InvalidVersionPartException,
+    MissingValueForSerializationException,
+)
 from bumpversion.functions import NumericFunction, ValuesFunction
 from bumpversion.utils import keyvaluestring
 

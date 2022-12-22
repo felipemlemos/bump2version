@@ -4,7 +4,10 @@ import os
 import subprocess
 from tempfile import NamedTemporaryFile
 
-from bumpversion.exceptions import MercurialDoesNotSupportSignedTagsException, WorkingDirectoryIsDirtyException
+from bumpversion.exceptions import (
+    MercurialDoesNotSupportSignedTagsException,
+    WorkingDirectoryIsDirtyException,
+)
 
 logger = logging.getLogger(__name__)
 

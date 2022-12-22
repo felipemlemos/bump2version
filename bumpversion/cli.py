@@ -12,10 +12,23 @@ from configparser import ConfigParser, NoOptionError, RawConfigParser
 from datetime import datetime
 
 from bumpversion import __title__, __version__
-from bumpversion.exceptions import IncompleteVersionRepresentationException, MissingValueForSerializationException, WorkingDirectoryIsDirtyException
-from bumpversion.utils import ConfiguredFile, DiscardDefaultIfSpecifiedAppendAction, keyvaluestring, prefixed_environ
+from bumpversion.exceptions import (
+    IncompleteVersionRepresentationException,
+    MissingValueForSerializationException,
+    WorkingDirectoryIsDirtyException,
+)
+from bumpversion.utils import (
+    ConfiguredFile,
+    DiscardDefaultIfSpecifiedAppendAction,
+    keyvaluestring,
+    prefixed_environ,
+)
 from bumpversion.vcs import Git, Mercurial
-from bumpversion.version_part import ConfiguredVersionPartConfiguration, NumericVersionPartConfiguration, VersionConfig
+from bumpversion.version_part import (
+    ConfiguredVersionPartConfiguration,
+    NumericVersionPartConfiguration,
+    VersionConfig,
+)
 
 DESCRIPTION = "{}: v{} (using Python v{})".format(__title__, __version__, sys.version.split("\n")[0].split(" ")[0])
 VCS = [Git, Mercurial]

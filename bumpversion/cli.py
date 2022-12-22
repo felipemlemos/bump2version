@@ -414,7 +414,7 @@ def _assemble_new_version(context, current_version, defaults, arg_current_versio
         except IncompleteVersionRepresentationException as e:
             logger.info("Opportunistic finding of new_version failed: %s", e.message)
         except KeyError as e:
-            logger.info("Opportunistic finding of new_version failed")
+            logger.info("Opportunistic finding of new_version failed: %s", e.message)
     return new_version
 
 

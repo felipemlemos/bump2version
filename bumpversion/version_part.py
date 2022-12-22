@@ -168,7 +168,7 @@ class VersionConfig:
         if not version_string:
             return None
 
-        regexp_one_line = "".join([l.split("#")[0].strip() for l in self.parse_regex.pattern.splitlines()])
+        regexp_one_line = "".join([lines.split("#")[0].strip() for lines in self.parse_regex.pattern.splitlines()])
 
         logger.info(
             "Parsing version '%s' using regexp '%s'",
@@ -261,6 +261,7 @@ class VersionConfig:
                 else:
                     logger.debug("Found '%s' usable serialization format, but it's longer", serialize_format)
             except IncompleteVersionRepresentationException as e:
+                logger.debug(e.message)
                 # If chosen, prefer shorter
                 if not chosen:
                     chosen = serialize_format

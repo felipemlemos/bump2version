@@ -9,7 +9,6 @@ defaults:
     shell: bash
 
 jobs:
-
   tox:
     strategy:
       fail-fast: false
@@ -21,6 +20,8 @@ jobs:
           - "3.6"
           - "3.7"
           - "3.8"
+          - "3.9"
+          - "3.10"
           - "pypy-3.7"
     runs-on: ${{ matrix.os }}
     steps:

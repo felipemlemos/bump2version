@@ -1,8 +1,7 @@
-from argparse import _AppendAction
-from difflib import unified_diff
-import io
 import logging
 import os
+from argparse import _AppendAction
+from difflib import unified_diff
 
 from bumpversion.exceptions import VersionNotFoundException
 
@@ -20,9 +19,7 @@ class DiscardDefaultIfSpecifiedAppendAction(_AppendAction):
             setattr(namespace, self.dest, [])
             self._discarded_default = True  # pylint: disable=attribute-defined-outside-init
 
-        super().__call__(
-            parser, namespace, values, option_string=None
-        )
+        super().__call__(parser, namespace, values, option_string=None)
 
 
 def keyvaluestring(d):
@@ -34,7 +31,6 @@ def prefixed_environ():
 
 
 class ConfiguredFile:
-
     def __init__(self, path, versionconfig):
         self.path = path
         self._versionconfig = versionconfig
@@ -65,11 +61,7 @@ class ConfiguredFile:
             return
 
         # version not found
-        raise VersionNotFoundException(
-            "Did not find '{}' in file: '{}'".format(
-                search_expression, self.path
-            )
-        )
+        raise VersionNotFoundException("Did not find '{}' in file: '{}'".format(search_expression, self.path))
 
     def contains(self, search):
         if not search:
@@ -85,11 +77,7 @@ class ConfiguredFile:
                 if len(lookbehind) > len(search_lines):
                     lookbehind = lookbehind[1:]
 
-                if (
-                    search_lines[0] in lookbehind[0]
-                    and search_lines[-1] in lookbehind[-1]
-                    and search_lines[1:-1] == lookbehind[1:-1]
-                ):
+                if search_lines[0] in lookbehind[0] and search_lines[-1] in lookbehind[-1] and search_lines[1:-1] == lookbehind[1:-1]:
                     logger.info(
                         "Found '%s' in %s at line %s: %s",
                         search,
@@ -106,9 +94,7 @@ class ConfiguredFile:
             file_content_before = f.read()
             file_new_lines = f.newlines
 
-        context["current_version"] = self._versionconfig.serialize(
-            current_version, context
-        )
+        context["current_version"] = self._versionconfig.serialize(current_version, context)
         context["new_version"] = self._versionconfig.serialize(new_version, context)
 
         search_for = self._versionconfig.search.format(**context)
@@ -118,9 +104,7 @@ class ConfiguredFile:
 
         if file_content_before == file_content_after:
             # TODO expose this to be configurable
-            file_content_after = file_content_before.replace(
-                current_version.original, replace_with
-            )
+            file_content_after = file_content_before.replace(current_version.original, replace_with)
 
         if file_content_before != file_content_after:
             logger.info("%s file %s:", "Would change" if dry_run else "Changing", self.path)

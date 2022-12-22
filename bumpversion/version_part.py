@@ -4,13 +4,12 @@ import sre_constants
 import string
 
 from bumpversion.exceptions import (
-    MissingValueForSerializationException,
     IncompleteVersionRepresentationException,
     InvalidVersionPartException,
+    MissingValueForSerializationException,
 )
 from bumpversion.functions import NumericFunction, ValuesFunction
 from bumpversion.utils import keyvaluestring
-
 
 logger = logging.getLogger(__name__)
 
@@ -84,9 +83,7 @@ class VersionPart:
         return self.value
 
     def __repr__(self):
-        return "<bumpversion.VersionPart:{}:{}>".format(
-            self.config.__class__.__name__, self.value
-        )
+        return "<bumpversion.VersionPart:{}:{}>".format(self.config.__class__.__name__, self.value)
 
     def __eq__(self, other):
         return self.value == other.value
@@ -96,7 +93,6 @@ class VersionPart:
 
 
 class Version:
-
     def __init__(self, values, original=None):
         self._values = dict(values)
         self.original = original
@@ -138,9 +134,7 @@ class Version:
 
 
 def labels_for_format(serialize_format):
-    return (
-        label for _, label, _, _ in string.Formatter().parse(serialize_format) if label
-    )
+    return (label for _, label, _, _ in string.Formatter().parse(serialize_format) if label)
 
 
 class VersionConfig:
@@ -174,9 +168,7 @@ class VersionConfig:
         if not version_string:
             return None
 
-        regexp_one_line = "".join(
-            [l.split("#")[0].strip() for l in self.parse_regex.pattern.splitlines()]
-        )
+        regexp_one_line = "".join([lines.split("#")[0].strip() for lines in self.parse_regex.pattern.splitlines()])
 
         logger.info(
             "Parsing version '%s' using regexp '%s'",
@@ -222,11 +214,7 @@ class VersionConfig:
 
         except KeyError as e:
             missing_key = getattr(e, "message", e.args[0])
-            raise MissingValueForSerializationException(
-                "Did not find key {} in {} when serializing version number".format(
-                    repr(missing_key), repr(version)
-                )
-            )
+            raise MissingValueForSerializationException("Did not find key {} in {} when serializing version number".format(repr(missing_key), repr(version)))
 
         keys_needing_representation = set()
 
@@ -240,7 +228,7 @@ class VersionConfig:
                 continue
 
             if not v.is_optional():
-                keys_needing_representation = set(keys[:i+1])
+                keys_needing_representation = set(keys[: i + 1])
 
         required_by_format = set(labels_for_format(serialize_format))
 
@@ -263,9 +251,7 @@ class VersionConfig:
 
         for serialize_format in self.serialize_formats:
             try:
-                self._serialize(
-                    version, serialize_format, context, raise_if_incomplete=True
-                )
+                self._serialize(version, serialize_format, context, raise_if_incomplete=True)
                 # Prefer shorter or first search expression.
                 chosen_part_count = None if not chosen else len(list(string.Formatter().parse(chosen)))
                 serialize_part_count = len(list(string.Formatter().parse(serialize_format)))
@@ -275,6 +261,7 @@ class VersionConfig:
                 else:
                     logger.debug("Found '%s' usable serialization format, but it's longer", serialize_format)
             except IncompleteVersionRepresentationException as e:
+                logger.debug(e.message)
                 # If chosen, prefer shorter
                 if not chosen:
                     chosen = serialize_format
@@ -290,8 +277,6 @@ class VersionConfig:
         return chosen
 
     def serialize(self, version, context):
-        serialized = self._serialize(
-            version, self._choose_serialize_format(version, context), context
-        )
+        serialized = self._serialize(version, self._choose_serialize_format(version, context), context)
         logger.debug("Serialized to '%s'", serialized)
         return serialized

@@ -5,10 +5,9 @@ import subprocess
 from tempfile import NamedTemporaryFile
 
 from bumpversion.exceptions import (
-    WorkingDirectoryIsDirtyException,
     MercurialDoesNotSupportSignedTagsException,
+    WorkingDirectoryIsDirtyException,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +27,9 @@ class BaseVCS:
         for key in ("current_version", "new_version"):
             env[str("BUMPVERSION_" + key.upper())] = str(context[key])
         try:
-            subprocess.check_output(
-                cls._COMMIT_COMMAND + [f.name] + extra_args, env=env
-            )
+            subprocess.check_output(cls._COMMIT_COMMAND + [f.name] + extra_args, env=env)
         except subprocess.CalledProcessError as exc:
-            err_msg = "Failed to run {}: return code {}, output: {}".format(
-                exc.cmd, exc.returncode, exc.output
-            )
+            err_msg = "Failed to run {}: return code {}, output: {}".format(exc.cmd, exc.returncode, exc.output)
             logger.exception(err_msg)
             raise exc
         finally:
@@ -64,20 +59,10 @@ class Git(BaseVCS):
 
     @classmethod
     def assert_nondirty(cls):
-        lines = [
-            line.strip()
-            for line in subprocess.check_output(
-                ["git", "status", "--porcelain"]
-            ).splitlines()
-            if not line.strip().startswith(b"??")
-        ]
+        lines = [line.strip() for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines() if not line.strip().startswith(b"??")]
 
         if lines:
-            raise WorkingDirectoryIsDirtyException(
-                "Git working directory is not clean:\n{}".format(
-                    b"\n".join(lines).decode()
-                )
-            )
+            raise WorkingDirectoryIsDirtyException("Git working directory is not clean:\n{}".format(b"\n".join(lines).decode()))
 
     @classmethod
     def latest_tag_info(cls):
@@ -149,18 +134,10 @@ class Mercurial(BaseVCS):
 
     @classmethod
     def assert_nondirty(cls):
-        lines = [
-            line.strip()
-            for line in subprocess.check_output(["hg", "status", "-mard"]).splitlines()
-            if not line.strip().startswith(b"??")
-        ]
+        lines = [line.strip() for line in subprocess.check_output(["hg", "status", "-mard"]).splitlines() if not line.strip().startswith(b"??")]
 
         if lines:
-            raise WorkingDirectoryIsDirtyException(
-                "Mercurial working directory is not clean:\n{}".format(
-                    b"\n".join(lines).decode()
-                )
-            )
+            raise WorkingDirectoryIsDirtyException("Mercurial working directory is not clean:\n{}".format(b"\n".join(lines).decode()))
 
     @classmethod
     def add_path(cls, path):
@@ -170,9 +147,7 @@ class Mercurial(BaseVCS):
     def tag(cls, sign, name, message):
         command = ["hg", "tag", name]
         if sign:
-            raise MercurialDoesNotSupportSignedTagsException(
-                "Mercurial does not support signed tags."
-            )
+            raise MercurialDoesNotSupportSignedTagsException("Mercurial does not support signed tags.")
         if message:
             command += ["--message", message]
         subprocess.check_output(command)

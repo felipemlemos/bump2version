@@ -42,4 +42,3 @@ Start with an initial release, say `1.0.0`.
    the `release` before bumping `patch` again. Trying to bump the release
    while in final release state will issue
    `ValueError: The part has already the maximum value among ['dev', 'rc', 'ga'] and cannot be bumped`.
-

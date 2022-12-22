@@ -21,13 +21,9 @@ class NumericFunction:
 
         if first_value is not None:
             try:
-                _, _, _ = self.FIRST_NUMERIC.search(
-                    first_value
-                ).groups()
+                _, _, _ = self.FIRST_NUMERIC.search(first_value).groups()
             except AttributeError:
-                raise ValueError(
-                    "The given first value {} does not contain any digit".format(first_value)
-                )
+                raise ValueError("The given first value {} does not contain any digit".format(first_value))
         else:
             first_value = 0
 
@@ -36,9 +32,7 @@ class NumericFunction:
         self.independent = independent
 
     def bump(self, value):
-        part_prefix, part_numeric, part_suffix = self.FIRST_NUMERIC.search(
-            value
-        ).groups()
+        part_prefix, part_numeric, part_suffix = self.FIRST_NUMERIC.search(value).groups()
         bumped_numeric = int(part_numeric) + 1
 
         return "".join([part_prefix, str(bumped_numeric), part_suffix])
@@ -69,11 +63,7 @@ class ValuesFunction:
             optional_value = values[0]
 
         if optional_value not in values:
-            raise ValueError(
-                "Optional value {} must be included in values {}".format(
-                    optional_value, values
-                )
-            )
+            raise ValueError("Optional value {} must be included in values {}".format(optional_value, values))
 
         self.optional_value = optional_value
 
@@ -81,11 +71,7 @@ class ValuesFunction:
             first_value = values[0]
 
         if first_value not in values:
-            raise ValueError(
-                "First value {} must be included in values {}".format(
-                    first_value, values
-                )
-            )
+            raise ValueError("First value {} must be included in values {}".format(first_value, values))
 
         self.first_value = first_value
         self.independent = independent
@@ -94,8 +80,4 @@ class ValuesFunction:
         try:
             return self._values[self._values.index(value) + 1]
         except IndexError:
-            raise ValueError(
-                "The part has already the maximum value among {} and cannot be bumped.".format(
-                    self._values
-                )
-            )
+            raise ValueError("The part has already the maximum value among {} and cannot be bumped.".format(self._values))
